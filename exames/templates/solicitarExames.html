@@ -28,6 +28,7 @@
             <div class="col-md-2">
             </div>
             <div class="col-md card">
+                {% if solicitacaoExames %}
                     {% for exame in solicitacaoExames %}
                             <div style="font-size: 20px; font-weight: bold">
 
@@ -48,11 +49,17 @@
                         <label>Total: </label><label class="previa-preco">R$ {{precoTotal}}</label>
                     </div>
                     <br>
-                    <h5>Data: 08 de Setembro</h5>
+                    <h5></h5>
                     <br>
-                    <form action="" method="POST">
+                    <form action="{% url 'fecharPedido' %}" method="POST"> {% csrf_token %}
+                        {% for exame in solicitacaoExames %}
+                            <input type="hidden" value="{{exame.id}}" name="exames">
+                        {% endfor %}
                         <button class="btn-secundario">Fechar pedido</button>
                     </form>
+                {% else %}
+                    <h3>Nenhum exame selecionado</h3>
+                {% endif %}
             </div>
         </div>
     </div>

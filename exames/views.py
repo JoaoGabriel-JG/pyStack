@@ -27,3 +27,9 @@ def solicitarExames(request):
                                                                                 'solicitacaoExames': solicitacaoExames,
                                                                                 'precoTotal': precoTotal
                                                                             })
+
+def fecharPedido(request):
+    examesId = request.POST.get('exames')
+    print(examesId)
+
+    return HttpResponse('Estou aqui')
