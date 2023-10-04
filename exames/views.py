@@ -1,7 +1,10 @@
-from django.http import HttpResponse
-from django.shortcuts import render
+from datetime import datetime
+from django.contrib import messages
+from django.contrib.messages import constants
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import TiposExames
+from .models import TiposExames, PedidosExames, SolicitacaoExame
+
 
 @login_required()
 def solicitarExames(request):
@@ -29,7 +32,28 @@ def solicitarExames(request):
                                                                             })
 
 def fecharPedido(request):
-    examesId = request.POST.get('exames')
-    print(examesId)
+    examesId = request.POST.getlist('exames')
+    solicitacaoExames = TiposExames.objects.filter(id__in=examesId)
 
-    return HttpResponse('Estou aqui')
+    pedidoExame = PedidosExames(
+        usuario=request.user,
+        data=datetime.now()
+    )
+
+    pedidoExame.save()
+
+    for exame in solicitacaoExames:
+        solicitacaoExamesTemp = SolicitacaoExame(
+            usuario=request.user,
+            exame=exame,
+            status='E'
+        )
+        solicitacaoExamesTemp.save()
+        pedidoExame.exames.add(solicitacaoExamesTemp)
+
+    pedidoExame.save()
+
+    messages.add_message(request, constants.SUCCESS, 'Pedido de exame realizado com sucesso')
+
+    return redirect('/exames/verPedidos/')
+
