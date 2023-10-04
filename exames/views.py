@@ -76,3 +76,9 @@ def cancelarPedido(request, pediodoId):
     messages.add_message(request, constants.SUCCESS, 'Pedido cancelado com sucesso')
 
     return redirect('/exames/gerenciarPedidos/')
+
+@login_required()
+def gerenciarExames(request):
+    exames = SolicitacaoExame.objects.filter(usuario=request.user)
+
+    return render(request, 'gerenciarExames.html', {'exames': exames})

@@ -6,4 +6,5 @@ urlpatterns = [
     path('fecharPedido/', views.fecharPedido, name='fecharPedido'),
     path('gerenciarPedidos/', views.gerenciarPedidos, name="gerenciarPedidos"),
     path('cancelarPedido/<int:pediodoId>', views.cancelarPedido, name='cancelarPedido'),
+    path('gerenciarExames/', views.gerenciarExames, name="gerenciarExames"),
 ]
