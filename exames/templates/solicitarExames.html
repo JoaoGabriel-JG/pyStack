@@ -15,7 +15,7 @@
 
                 <form action="{% url 'solicitarExames' %}" method="POST"> {% csrf_token %}
                     <label for="">Selecione os exames para realizar</label>
-                    <select class="select form-control bg-select" multiple name="exames">
+                    <select class="select form-select bg-select" multiple name="exames">
                             {% for exame in tiposExames %}
                                 <option class="opt" value="{{exame.id}}">{{exame.nome}}</option>
                             {% endfor %}

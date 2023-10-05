@@ -20,8 +20,6 @@ def solicitarExames(request):
         solicitacaoExames = TiposExames.objects.filter(id__in=examesId)
         precoTotal = 0
 
-        #TO DO: Calcular preco dos dados disponiveis
-
         for i in solicitacaoExames:
             if i.disponivel:
                 precoTotal += i.preco
@@ -82,3 +80,34 @@ def gerenciarExames(request):
     exames = SolicitacaoExame.objects.filter(usuario=request.user)
 
     return render(request, 'gerenciarExames.html', {'exames': exames})
+
+@login_required()
+def permitirAbrirExames(request, exameId):
+    exame = SolicitacaoExame.objects.get(id=exameId)
+
+    if not exame.requerSenha:
+        return redirect(exame.resultado.url)
+    elif not exame.resultado:
+        messages.add_message(request, constants.ERROR, 'PDF inexistente ou inválido')
+        return redirect('/exames/gerenciarExames')
+
+    return redirect(f'/exames/solicitarSenhaExame/{exameId}')
+
+@login_required()
+def solicitarSenhaExame(request, exameId):
+    exame = SolicitacaoExame.objects.get(id=exameId)
+
+    if request.method == 'GET':
+        return render(request, 'solicitarSenhaExame.html', {'exame': exame})
+    elif request.method == 'POST':
+        senha = request.POST.get('senha')
+        if senha == exame.senha and exame.resultado:
+            return redirect(exame.resultado.url)
+        elif not exame.resultado:
+            messages.add_message(request, constants.ERROR, 'PDF inexistente ou inválido')
+            return redirect(f'/exames/gerenciarExames')
+        else:
+            messages.add_message(request, constants.ERROR, 'Senha incorreta')
+            return redirect(f'/exames/solicitarSenhaExame/{exameId}')
+
+

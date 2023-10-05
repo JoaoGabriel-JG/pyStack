@@ -34,14 +34,17 @@ class SolicitacaoExame(models.Model):
         return f'{self.usuario} | {self.exame.nome}'
 
     def badgeTemplate(self):
-        if self.status == 'E':
-            classes = 'bg-warning text-dark'
-            texto = 'Em análise'
-        elif self.status == 'F':
-            classes = 'bg-success'
-            texto = 'Finalizado'
+        classesCss = ''
+        texto = ''
 
-        return mark_safe(f'<span class="badge {classes}">{texto}</span>')
+        if self.status == 'E':
+            classesCss = 'bg-warning text-dark'
+            texto = "Em análise"
+        elif self.status == 'F':
+            classesCss = 'bg-success'
+            texto = "Finalizado"
+
+        return mark_safe(f"<span class='badge bg-primary {classesCss}'>{texto}</span>")
 
 class PedidosExames(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.DO_NOTHING)
