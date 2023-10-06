@@ -9,4 +9,5 @@ urlpatterns = [
     path('gerenciarExames/', views.gerenciarExames, name="gerenciarExames"),
     path('permitirAbrirExames/<int:exameId>', views.permitirAbrirExames, name="permitirAbrirExames"),
     path('solicitarSenhaExame/<int:exameId>', views.solicitarSenhaExame, name="solicitarSenhaExame"),
+    path('gerarAcessoMedico/', views.gerarAcessoMedico, name="gerarAcessoMedico"),
 ]

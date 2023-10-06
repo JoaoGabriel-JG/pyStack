@@ -4,7 +4,7 @@ from django.contrib.messages import constants
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import TiposExames, PedidosExames, SolicitacaoExame
+from .models import TiposExames, PedidosExames, SolicitacaoExame, AcessoMedico
 
 
 @login_required()
@@ -110,4 +110,28 @@ def solicitarSenhaExame(request, exameId):
             messages.add_message(request, constants.ERROR, 'Senha incorreta')
             return redirect(f'/exames/solicitarSenhaExame/{exameId}')
 
+@login_required()
+def gerarAcessoMedico(request):
+    if request.method == 'GET':
+        acessosMedico = AcessoMedico.objects.filter(usuario=request.user)
 
+        return render(request, 'gerarAcessoMedico.html', {'acessosMedico': acessosMedico})
+    elif request.method == 'POST':
+                identificacao = request.POST.get('identificacao')
+                tempoDeAcesso = request.POST.get('tempoDeAcesso')
+                dataExamesIniciais = request.POST.get("dataExamesIniciais")
+                dataExamesFinais = request.POST.get("dataExamesFinais")
+
+                acessoMedico = AcessoMedico(
+                    usuario=request.user,
+                    identificacao=identificacao,
+                    tempoDeAcesso=tempoDeAcesso,
+                    dataExamesIniciais=dataExamesIniciais,
+                    dataExamesFinais=dataExamesFinais,
+                    criadoEm=datetime.now()
+                )
+
+                acessoMedico.save()
+
+                messages.add_message(request, constants.SUCCESS, 'Acesso gerado com sucesso')
+                return redirect('/exames/gerarAcessoMedico')
