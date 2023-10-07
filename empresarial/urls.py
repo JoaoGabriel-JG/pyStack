@@ -7,4 +7,5 @@ urlpatterns = [
     path('exameCliente/<int:exame_id>', views.exameCliente, name="exameCliente"),
     path('proxyPdf/<int:exame_id>', views.proxyPdf, name="proxyPdf"),
     path('gerarSenha/<int:exame_id>', views.gerarSenha, name="gerarSenha"),
+    path('alterarDadosExame/<int:exame_id>', views.alterarDadosExame, name="alterarDadosExame"),
 ]
