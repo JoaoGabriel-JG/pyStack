@@ -135,3 +135,14 @@ def gerarAcessoMedico(request):
 
                 messages.add_message(request, constants.SUCCESS, 'Acesso gerado com sucesso')
                 return redirect('/exames/gerarAcessoMedico')
+
+def acessoMedico(request, token):
+    acessoMedico = AcessoMedico.objects.get(token=token)
+
+    if acessoMedico.status == 'Expirado':
+        messages.add_message(request, constants.ERROR, 'Acesso expirado')
+        return redirect('/usuarios/login')
+
+    pedidos = PedidosExames.objects.filter(usuario=acessoMedico.usuario).filter(data__gte = acessoMedico.dataExamesIniciais).filter(data__lte = acessoMedico.dataExamesFinais)
+
+    return render(request, 'acessoMedico.html', {'pedidos': pedidos})

@@ -1,4 +1,5 @@
-from datetime import timedelta, timezone
+from datetime import *
+from django.utils import timezone
 from secrets import token_urlsafe
 from django.contrib.auth.models import User
 from django.db import models
@@ -78,3 +79,7 @@ class AcessoMedico(models.Model):
     @property
     def status(self):
         return 'Expirado' if timezone.now() > (self.criadoEm + timedelta(hours=self.tempoDeAcesso)) else 'Ativo'
+
+    @property
+    def url(self):
+        return f'http://127.0.0.1:8000/exames/acessoMedico/{self.token}'

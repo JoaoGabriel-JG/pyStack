@@ -10,4 +10,5 @@ urlpatterns = [
     path('permitirAbrirExames/<int:exameId>', views.permitirAbrirExames, name="permitirAbrirExames"),
     path('solicitarSenhaExame/<int:exameId>', views.solicitarSenhaExame, name="solicitarSenhaExame"),
     path('gerarAcessoMedico/', views.gerarAcessoMedico, name="gerarAcessoMedico"),
+    path('acessoMedico/<str:token>', views.acessoMedico, name="acessoMedico"),
 ]
