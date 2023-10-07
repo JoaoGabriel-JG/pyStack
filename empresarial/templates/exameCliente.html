@@ -29,7 +29,7 @@
                     <br>
                     <br>
                     {% if exame.resultado %}
-                        <a style="width: 100%;" href="" target="__blank"><div  style="width: 100%;" id="pdf-container">Seu exame aqui</div></a>
+                        <a style="width: 100%;" href="{{exame.resultado.url}}" target="__blank"><div  style="width: 100%;" id="pdf-container">Seu exame aqui</div></a>
                     {% endif %}
             </div>
             <div class="col-md-6">
@@ -45,15 +45,16 @@
 
                 <input type="submit" value="Salvar" class="btn-default">
                 </form>
-                <a style="text-decoration: none;" href="" class="btn-secundario">Gerar senha</a>
+                <a style="text-decoration: none;" href="{% url 'gerarSenha' exame.id %}" class="btn-secundario">Gerar senha</a>
             </div>
         </div>
     </div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
 <script>
     const container = document.getElementById('pdf-container');
 
-    pdfjsLib.getDocument('{% url 'proxyPdf' exame.id %}').promise.then(pdf => {
+    pdfjsLib.getDocument("{% url 'proxyPdf' exame.id %}").promise.then(pdf => {
         pdf.getPage(1).then(page => {
             const canvas = document.createElement('canvas');
             const context = canvas.getContext('2d');
